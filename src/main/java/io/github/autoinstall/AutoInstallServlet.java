@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 /**
  *
@@ -41,6 +42,11 @@ public class AutoInstallServlet extends HttpServlet {
             installURI = "install";
         else
             installURI = config.getInitParameter("autoinstall.installURI");
+        // mapper
+        String jsonProvider = config.getInitParameter("autoinstall.jsonProvider");
+        if (jsonProvider == null)
+            jsonProvider = "gson";
+        jsonMapper = JsonMapper.getInstance(jsonProvider);
     }
 
     private List<InstallTask> readInstall(ServletConfig config) {
@@ -63,10 +69,10 @@ public class AutoInstallServlet extends HttpServlet {
             } else if (req.getRequestURI().equals(installURI)) {
                 messages = executeInstall(installSteps, req);
             } else {
-                messages = Arrays.asList(new AutoInstallResult(false, getMessage("error.action_notfound", req.getLocale())));
+                messages = Arrays.asList(new AutoInstallResult(false, "error.action_notfound"));
             }
         }
-        writeSimpleJson(messages, resp);
+        writeSimpleJson(messages, req.getLocale(), resp);
     }
 
     private boolean isInstalled(HttpServletRequest req) {
@@ -89,12 +95,15 @@ public class AutoInstallServlet extends HttpServlet {
         return messages;
     }
 
-    private void writeSimpleJson(List<AutoInstallResult> messages, HttpServletResponse resp) throws IOException {
-
+    private void writeSimpleJson(List<AutoInstallResult> messages, Locale locale, HttpServletResponse resp) throws IOException {
+        // get message keys
+        resp.getWriter().print(jsonMapper.serializeObject(messages));
     }
 
     private String getMessage(String key, Locale locale) {
-        return null;
+        // cache with locale?
+        ResourceBundle rb = ResourceBundle.getBundle("autoinstall", locale);
+        return rb.getString(key);
     }
 
 

@@ -18,7 +18,7 @@ public abstract class JsonMapper {
             throw new IllegalArgumentException("Provider not implemented: " + provider);
     }
 
-    public abstract <T extends Object> T deserializeObject(String json, T clazz);
+    public abstract <T> T deserializeObject(String json, Class<T> clazz);
 
     public abstract String serializeObject(Object obj);
 }
