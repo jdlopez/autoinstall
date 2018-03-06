@@ -24,4 +24,14 @@ Description here (io.github.autoinstall.domain.InstallTask)
 * Create path
 * Set parameter values
 * Create properties file with parameter values
+* Execute SQL script
+
+Ex:
+
+* Db creation
+* Create tables
+* Insert default data
+* Db user (create)
+* App default user (aka admin)
+* Default config file
 
