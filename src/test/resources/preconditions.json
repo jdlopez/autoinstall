@@ -1,0 +1,11 @@
+[
+  {
+    "type": "CheckPath",
+    "path": "${java.home}/bin",
+    "writable": "true"
+  },
+  {
+    "type": "CheckPath",
+    "path": "${user.home}"
+  }
+]

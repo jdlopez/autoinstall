@@ -1,8 +1,8 @@
 package io.github.autoinstall;
 
-import io.github.autoinstall.domain.AutoInstallResult;
-import io.github.autoinstall.domain.InstallTask;
-import io.github.autoinstall.domain.PreCheckCondition;
+import io.github.autoinstall.domain.installs.AutoInstallResult;
+import io.github.autoinstall.domain.installs.InstallTask;
+import io.github.autoinstall.domain.checks.PreCheckCondition;
 import io.github.autoinstall.json.JsonMapper;
 
 import javax.servlet.ServletConfig;
@@ -46,7 +46,7 @@ public class AutoInstallServlet extends HttpServlet {
         String jsonProvider = config.getInitParameter("autoinstall.jsonProvider");
         if (jsonProvider == null)
             jsonProvider = "gson";
-        jsonMapper = JsonMapper.getInstance(jsonProvider);
+        jsonMapper = JsonMapper.getInstance();
     }
 
     private List<InstallTask> readInstall(ServletConfig config) {
@@ -97,7 +97,7 @@ public class AutoInstallServlet extends HttpServlet {
 
     private void writeSimpleJson(List<AutoInstallResult> messages, Locale locale, HttpServletResponse resp) throws IOException {
         // get message keys
-        resp.getWriter().print(jsonMapper.serializeObject(messages));
+        //resp.getWriter().print(jsonMapper.serializeObject(messages));
     }
 
     private String getMessage(String key, Locale locale) {

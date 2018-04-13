@@ -1,4 +1,4 @@
-package io.github.autoinstall.domain;
+package io.github.autoinstall.domain.installs;
 
 import javax.servlet.http.HttpServletRequest;
 

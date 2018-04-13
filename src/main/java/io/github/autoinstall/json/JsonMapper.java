@@ -1,24 +1,31 @@
 package io.github.autoinstall.json;
 
+import io.github.autoinstall.domain.checks.PreCheckCondition;
+import io.github.autoinstall.exception.ConfigurationException;
+
+import java.util.List;
+
 /**
  * Facade to hide implementation of json mapper (jackson or gson)
  * @author jdlopez
  */
 public abstract class JsonMapper {
 
-    private static final String JSON_PROVIDER_JACKSON = "jackson";
-    private static final String JSON_PROVIDER_GSON = "gson";
-
-    public static JsonMapper getInstance(String provider) {
-        if (JSON_PROVIDER_JACKSON.equalsIgnoreCase(provider))
-            return new JacksonJsonMapper();
-        else if (JSON_PROVIDER_GSON.equalsIgnoreCase(provider))
+    public static JsonMapper getInstance() {
+        try { // 1st
+            Class gsonClass = Class.forName("com.google.gson.Gson");
             return new GsonJsonMapper();
-        else
-            throw new IllegalArgumentException("Provider not implemented: " + provider);
+        } catch (ClassNotFoundException e) {
+            try {
+                Class jacksonClass = Class.forName("com.google.gson.Gson");
+                return new JacksonJsonMapper();
+            } catch (ClassNotFoundException e1) { // none!!
+                throw new ConfigurationException("No JSON provider found on classpath: Gson or Jackson");
+            }
+        }
     }
 
-    public abstract <T> T deserializeObject(String json, Class<T> clazz);
+    public abstract List<PreCheckCondition> deserializePreChecks(String json);
 
-    public abstract String serializeObject(Object obj);
+    public abstract String serializePreChecks(List<PreCheckCondition> objs);
 }

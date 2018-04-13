@@ -1,4 +1,6 @@
-package io.github.autoinstall.domain;
+package io.github.autoinstall.domain.checks;
+
+import io.github.autoinstall.domain.installs.AutoInstallResult;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -39,4 +41,5 @@ public class CheckJndi extends PreCheckCondition {
             return new AutoInstallResult(false, "check.jndi.exception", e.getMessage());
         }
     }
+
 }
