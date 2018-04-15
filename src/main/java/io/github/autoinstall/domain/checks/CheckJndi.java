@@ -1,6 +1,6 @@
 package io.github.autoinstall.domain.checks;
 
-import io.github.autoinstall.domain.installs.AutoInstallResult;
+import io.github.autoinstall.domain.AutoInstallResult;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -28,18 +28,25 @@ public class CheckJndi extends PreCheckCondition {
 
     @Override
     public AutoInstallResult validate(HttpServletRequest req) {
+        Class clazz = null;
+        Object o = null;
+        try {
+            clazz = Class.forName(this.className);
+        } catch (ClassNotFoundException e) {
+            return new AutoInstallResult(false, "check.jndi.class_not_found", e.getMessage());
+        }
         try {
             InitialContext ic = new InitialContext();
-            Object o = ic.lookup(jndi);
-            if (o == null)
-                return new AutoInstallResult(false, "check.jndi.not_found");
-            else if (o.getClass().getName().equalsIgnoreCase(className))
-                return new AutoInstallResult(true, "check.jndi.success");
-            else
-                return new AutoInstallResult(false, "check.jndi.wrong_class", o.getClass().getName());
+            o = ic.lookup(jndi);
         } catch (NamingException e) {
             return new AutoInstallResult(false, "check.jndi.exception", e.getMessage());
         }
+        if (o == null)
+            return new AutoInstallResult(false, "check.jndi.name_not_found");
+        else if (clazz.isInstance(o))
+            return new AutoInstallResult(true, "check.jndi.success");
+        else
+            return new AutoInstallResult(false, "check.jndi.wrong_class", clazz.getName());
     }
 
 }
