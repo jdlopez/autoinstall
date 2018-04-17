@@ -1,0 +1,75 @@
+[
+  {
+    "name": "Make config path",
+    "type": "InstallMkDir",
+    "vars": [
+      {
+        "key": "config_dir",
+        "help": "Configuration directory. Config file will be placed here"
+      }
+    ],
+    "path": "${config_dir}"
+  },
+  {
+    "name": "Copy config properties file",
+    "type": "InstallCreateFile",
+    "sourceFile": "/source_config.properties",
+    "destFile": "${config_dir}/config.properties"
+  },
+  {
+    "name": "Create database tables and insert default data",
+    "type": "InstallSqlExec",
+    "vars": [
+      {
+        "key": "jdbc_driver",
+        "help": "Driver class of JDBC connection"
+      },
+      {
+        "key": "jdbc_url",
+        "help": "URL of JDBC connection"
+      },
+      {
+        "key": "jdbc_user",
+        "help": "User name of JDBC connection"
+      },
+      {
+        "key": "jdbc_pass",
+        "help": "Password of JDBC connection"
+      },
+      {
+        "key": "some_database_prefix",
+        "help": "Variable to replace some data in sql command file"
+      }
+    ],
+    "connection": {
+      "jdbcDriver": "${jdbc_driver}",
+      "jdbcUrl": "${jdbc_url}",
+      "jdbcUser": "${jdbc_user}",
+      "jdbcPass": "${jdbc_pass}"
+    },
+    "statements": [
+      "file:/autoinstall/createtables.sql",
+      "file:/autoinstall/defaultdata.sql"
+    ]
+  },
+  {
+    "name": "Insert admin user",
+    "type": "InstallSqlExec",
+    "vars": [
+      {
+        "key": "admin_user",
+        "help": "Administrative privilegies user name"
+      }
+    ],
+    "connection": {
+      "jdbcDriver": "${jdbc_driver}",
+      "jdbcUrl": "${jdbc_url}",
+      "jdbcUser": "${jdbc_user}",
+      "jdbcPass": "${jdbc_pass}"
+    },
+    "statements": [
+      "INSERT INTO USER (USERNAME, PASSWORD) VALUES ('${admin_user}', 'DEFAULT_PASSWORD');",
+      "INSERT INTO USER_ROLE (USERNAME, ROLE) VALUES ('${admin_user}', 'ADMIN');"
+    ]
+  }
+]

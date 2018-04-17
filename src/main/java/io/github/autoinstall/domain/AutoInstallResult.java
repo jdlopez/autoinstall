@@ -1,4 +1,4 @@
-package io.github.autoinstall.domain.installs;
+package io.github.autoinstall.domain;
 
 /**
  *

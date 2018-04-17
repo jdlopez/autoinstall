@@ -1,6 +1,6 @@
 package io.github.autoinstall.domain.checks;
 
-import io.github.autoinstall.domain.installs.AutoInstallResult;
+import io.github.autoinstall.domain.AutoInstallResult;
 
 import javax.servlet.http.HttpServletRequest;
 

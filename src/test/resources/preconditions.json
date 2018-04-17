@@ -7,5 +7,13 @@
   {
     "type": "CheckPath",
     "path": "${user.home}"
+  },
+  {
+    "type": "CheckClass",
+    "className": "java.util.Properties"
+  },
+  {
+    "type": "CheckClass",
+    "className": "i.just.invented.this.Class"
   }
 ]

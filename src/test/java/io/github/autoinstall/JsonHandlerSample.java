@@ -1,3 +1,5 @@
+package io.github.autoinstall;
+
 import io.github.autoinstall.domain.checks.PreCheckCondition;
 import io.github.autoinstall.json.GsonJsonMapper;
 import org.junit.Test;
